@@ -1,0 +1,14 @@
+﻿body {
+  font-size: 14px;
+  font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+}
+.settings-vitrine .sv-middlepanel {
+  overflow: auto;
+  resize: none;
+  border: none;
+}
+.settings-vitrine {
+  height: 800px;
+  overflow: hidden;
+  resize: vertical;
+}

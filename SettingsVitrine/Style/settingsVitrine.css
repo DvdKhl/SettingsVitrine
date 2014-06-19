@@ -1,0 +1,141 @@
+﻿.settings-vitrine {
+  display: flex;
+  width: 100%;
+}
+
+.vs--bug { /*VS Indention formatting bug*/
+}
+
+.settings-vitrine ul, .settings-vitrine il {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.settings-vitrine .sv-description ul, .settings-vitrine .sv-description il {
+  margin: 2px;
+}
+
+
+.settings-vitrine .sv-overview {
+  width: 200px;
+  min-width: 200px;
+  position: relative;
+}
+
+.settings-vitrine .sv-middlepanel {
+  flex-grow: 1;
+  height: 100%;
+}
+
+.settings-vitrine .sv-settings {
+  max-width: 600px;
+  margin: auto;
+  margin-top: 1em;
+}
+
+.settings-vitrine .sv-description {
+  width: 350px;
+  overflow: auto;
+}
+
+
+
+/*overview*/
+.settings-vitrine .sv-indent {
+  margin-left: 16px;
+}
+
+.settings-vitrine .sv-statebuttons {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+}
+
+.settings-vitrine .sv-statebuttons {
+  width: 100%;
+}
+
+.vs--bug { /*VS Indention formatting bug*/
+}
+
+.settings-vitrine .sv-statebuttons input {
+  flex-grow: 1;
+}
+
+
+
+/*settings*/
+.settings-vitrine .sv-entry {
+  display: flex;
+  align-items: center;
+}
+
+.settings-vitrine .sv-control {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  flex-grow: 1;
+}
+
+
+/*icons*/
+.settings-vitrine .sv-icon {
+  min-width: 16px;
+  min-height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.vs--bug { /*VS Indention formatting bug*/
+}
+
+
+.settings-vitrine .sv-icon.sv-icon-unset {
+  background: url('Images/unset.png') no-repeat center;
+}
+
+.settings-vitrine .sv-icon.sv-icon-set {
+  background: url('Images/set.png') no-repeat center;
+}
+
+.settings-vitrine .sv-settings .sv-icon.sv-icon-set,
+.settings-vitrine .sv-settings .sv-icon.sv-icon-unset,
+.settings-vitrine .sv-settings .sv-icon.sv-icon-reload {
+  cursor: pointer;
+}
+
+.settings-vitrine .sv-icon.sv-icon-reload {
+  background: url('Images/reload.png') no-repeat center;
+}
+
+.settings-vitrine .sv-icon.sv-icon-branch {
+  background: url('Images/folder.png') no-repeat;
+}
+
+.settings-vitrine .sv-icon.sv-icon-leaf {
+  background: url('Images/file.png') no-repeat;
+}
+
+
+
+/* Itempicker */
+.settings-vitrine .sv-itempicker {
+  display: flex;
+  align-items: center;
+}
+
+.vs--bug { /*VS Indention formatting bug*/
+}
+
+.settings-vitrine .sv-itempicker .sv-ip-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-vitrine .sv-itempicker .sv-ip-select select {
+  width: 100%;
+}
+
+.settings-vitrine .sv-itempicker .sv-ip-select {
+  flex-grow: 1;
+}
