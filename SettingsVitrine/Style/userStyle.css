@@ -1,6 +1,7 @@
 ﻿body {
   font-size: 14px;
   font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+  overflow: hidden;
 }
 .settings-vitrine .sv-middlepanel {
   overflow: auto;
@@ -8,7 +9,9 @@
   border: none;
 }
 .settings-vitrine {
-  height: 800px;
-  overflow: hidden;
   resize: vertical;
+}
+
+.sv-middlepanel label span {
+  user-select: none;
 }

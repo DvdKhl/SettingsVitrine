@@ -110,6 +110,9 @@ var SettingsVitrine;
         });
 
         SettingsStorage.prototype.Set = function (key, value) {
+            if (value === undefined)
+                return false;
+
             if (value === SettingsVitrine.Unset) {
                 delete this.settings[key];
             } else if (key in this.schemaEntries) {
@@ -119,6 +122,11 @@ var SettingsVitrine;
             }
             return true;
         };
+        SettingsStorage.prototype.SetMultiple = function (settings) {
+            for (var setting in settings)
+                this.Set(setting, settings[setting]);
+        };
+
         SettingsStorage.prototype.Get = function (key) {
             var value = undefined;
             if (key in this.settings) {
@@ -171,11 +179,6 @@ var SettingsVitrine;
         SettingsStorage.prototype.CreateDeriving = function (name) {
             return new SettingsStorage(name, this.schema, this);
         };
-        SettingsStorage.prototype.MergeIntoParent = function () {
-            if (this.parent == null)
-                throw new Error("SettingsStorage.MergeIntoParent: Parent is null");
-            angular.extend(this.parent.settings, this.settings);
-        };
 
         SettingsStorage.prototype.SaveToLocalStorage = function () {
             this.SaveTo(SettingsStorage.LocalStorageProvider);
@@ -212,11 +215,30 @@ var SettingsVitrine;
                     curStorage = curStorage.parent;
 
                     fullName = data.parentName ? schema.name + "." + data.parentName : null;
-                }
+                } else
+                    fullName = null;
             }
 
             return storage;
         };
+
+        Object.defineProperty(SettingsStorage.prototype, "Keys", {
+            get: function () {
+                return this.settings.keys();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(SettingsStorage.prototype, "Settings", {
+            get: function () {
+                return this.settings;
+            },
+            set: function (settings) {
+                this.settings = settings;
+            },
+            enumerable: true,
+            configurable: true
+        });
         SettingsStorage.LocalStorageProvider = new LocalStorageProvider();
         return SettingsStorage;
     })();
@@ -226,7 +248,7 @@ var SettingsVitrine;
         function DisplayController($scope, storage) {
             var _this = this;
             this.vm = {
-                storage: null,
+                settings: {},
                 sections: [],
                 selectedSection: null,
                 selectedTreeNode: null,
@@ -249,6 +271,9 @@ var SettingsVitrine;
                 resetDescription: function () {
                     return _this.resetDescription();
                 },
+                getDefault: function (key) {
+                    return _this.storage.GetSchemaDefault(key);
+                },
                 reloadAll: function () {
                     return _this.reloadAll();
                 },
@@ -265,7 +290,9 @@ var SettingsVitrine;
             this.$scope = $scope;
             $scope.vm = this.vm;
 
-            this.vm.storage = storage.CreateDeriving("TEMP");
+            this.storage = storage;
+            this.vm.settings = angular.extend({}, storage.Settings);
+
             this.vm.sections = this.flattenTree(storage.Schema);
             this.setSelection(this.vm.sections[0]);
 
@@ -275,37 +302,37 @@ var SettingsVitrine;
             this.vm.descriptionUrl = "templates/sv/intro.html";
         };
         DisplayController.prototype.reloadAll = function () {
-            this.vm.storage.ClearAll();
+            this.vm.settings = angular.extend({}, this.storage.Settings);
         };
         DisplayController.prototype.unsetAll = function () {
-            this.vm.storage.Parent.ClearAll();
+            this.vm.settings = {};
         };
         DisplayController.prototype.save = function () {
-            this.vm.storage.MergeIntoParent();
-            this.vm.storage.ClearAll();
-            this.vm.storage.Parent.SaveToLocalStorage();
+            this.storage.Settings = this.vm.settings;
+            this.storage.SaveToLocalStorage();
         };
         DisplayController.prototype.reload = function (key) {
-            var value = this.vm.storage.GetImmediate(key);
-            if (value == undefined)
-                value = SettingsVitrine.Unset;
-            this.vm.storage.Set(key, value);
+            var value = this.storage.GetImmediate(key);
+            if (value === undefined)
+                delete this.vm.settings[key];
+            else
+                this.vm.settings[key] = value;
         };
 
         DisplayController.prototype.toggleDefault = function (key) {
-            if (this.vm.storage.GetImmediate(key) === undefined) {
-                this.vm.storage.Set(key, this.vm.storage.Parent.Get(key));
+            if (this.vm.settings[key] === undefined) {
+                this.vm.settings[key] = this.storage.GetSchemaDefault(key); //TODO
             } else {
-                this.vm.storage.Set(key, SettingsVitrine.Unset);
+                delete this.vm.settings[key];
             }
         };
 
         DisplayController.prototype.isDefaultSetting = function (key) {
-            return this.vm.storage.GetImmediate(key) === undefined;
+            return this.vm.settings[key] === undefined;
         };
         DisplayController.prototype.hasSettingChanged = function (key) {
-            var newValue = this.vm.storage.GetImmediate(key);
-            var currentValue = this.vm.storage.Parent.GetImmediate(key);
+            var newValue = this.vm.settings[key];
+            var currentValue = this.storage.GetImmediate(key);
             return !angular.equals(newValue, currentValue);
         };
 
@@ -514,12 +541,10 @@ var SettingsVitrine;
         SettingsVitrine.SVModule.directive("svDirectiveProxy", function ($compile) {
             return {
                 restrict: 'E',
-                scope: { entry: "=", storage: "=", key: "=" },
+                scope: { entry: "=", value: "=", defValue: "=" },
                 replace: true,
                 link: function (scope, element, attrs, ctrl) {
-                    scope.value = scope.storage.Get(scope.key);
-
-                    var templateStr = "<" + scope.entry.bindingDirective + ' parameters="entry.bindingParameters" value="value"></' + scope.entry.bindingDirective + ">";
+                    var templateStr = "<" + scope.entry.bindingDirective + ' parameters="entry.bindingParameters" value="value" def-value="defValue"></' + scope.entry.bindingDirective + ">";
                     var compiledElem = $compile(templateStr)(scope);
                     element.replaceWith(compiledElem);
                 }

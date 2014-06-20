@@ -1,43 +1,4 @@
-﻿<script type="text/ng-template" id="templates/sv/display.html">
-  <div class="settings-vitrine">
-    <div class="sv-overview">
-      <input class="sv-search" placeholder="Search" type="text" />
-      <div class="sv-tree">
-        <div class="sv-treerow" ng-repeat="section in vm.sections">
-          <span ng-repeat="n in [] | range: section.depth" class="sv-indent"></span>
-          <span class="sv-treeitem" ng-class="section.isSelected ? 'sv-selected' : null" ng-click="vm.setSelection(section)">
-            <span class="sv-icon" ng-class="!section.base.entries ? 'sv-icon-branch' : 'sv-icon-leaf'"></span>
-            <span>{{section.base.name}}</span>
-          </span>
-        </div>
-      </div>
-      <div class="sv-statebuttons">
-        <input type="button" ng-click="vm.reloadAll()" class="sv-reload" value="Reload" />
-        <input type="button" ng-click="vm.unsetAll()" class="sv-unsetall" value="Unset all" />
-        <input type="button" ng-click="vm.save()" class="sv-save" value="Save" />
-      </div>
-    </div>
-
-    <div class="sv-middlepanel g_bubble" ng-click="vm.resetDescription()">
-      <div class="sv-settings">
-        <ul class="sv-section g_bubble" ng-repeat="section in vm.selectedSection">
-          <li><h3>{{vm.replaceAll(section.path, '\\.', ' > ')}}</h3></li>
-          <li class="sv-entry" ng-class-odd="'g_odd'" ng-repeat="entry in section.base.entries">
-            <div ng-click="vm.reload(section.path + '.' + entry.name)" class="sv-icon" ng-class="vm.hasSettingChanged(section.path + '.' + entry.name) ? 'sv-icon-reload' : null" title="{{vm.hasSettingChanged(section.path + '.' + entry.name) ? 'Reload setting from last saved state' : ''}}"></div>
-            <div class="sv-control"><sv-directive-proxy entry="entry" value="vm.newSettings[section.path + '.' + entry.name]" def-value="vm.getDefault(section.path + '.' + entry.name)"></sv-directive-proxy></div>
-            <div ng-click="vm.toggleDefault(section.path + '.' + entry.name)" class="sv-icon" ng-class="vm.isDefaultSetting(section.path + '.' + entry.name) ? 'sv-icon-set' : 'sv-icon-unset'" title="{{vm.isDefaultSetting(section.path + '.' + entry.name) ? 'Set setting to default value (copy)' : 'Unset setting and redirect to default instead'}}"></div>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="sv-description">
-      <div ng-include="vm.descriptionUrl"></div>
-    </div>
-
-  </div>
-</script>
-<script type="text/ng-template" id="templates/sv/intro.html">
+﻿<script type="text/ng-template" id="templates/sv/intro.html">
   <h1>Hints</h1>
   <ul>
     <li>
@@ -89,35 +50,3 @@
     </div>
   </div>
 </script>
-
-<div class="settings-vitrine">
-  <div class="sv-overview">
-    <input class="sv-search" placeholder="Search" type="text" />
-    <div class="sv-tree">
-      <div class="sv-treerow" ng-repeat="section in vm.sections">
-        <span ng-repeat="n in [] | range: section.depth" class="sv-indent"></span>
-        <span class="sv-treeitem" ng-class="section.isSelected ? 'sv-selected' : null" ng-click="vm.setSelection(section)">
-          <span class="sv-icon" ng-class="!section.base.entries ? 'sv-icon-branch' : 'sv-icon-leaf'"></span>
-          <span>{{section.base.name}}</span>
-        </span>
-      </div>
-    </div>
-  </div>
-
-  <div class="sv-middlepanel">
-    <div class="sv-settings">
-      <ul class="sv-section" ng-repeat="section in vm.selectedSection">
-        <li><h3>{{section.path.replace('\.', ' > ')}}</h3></li>
-        <li class="sv-entry" ng-class-odd="'sv-odd'" ng-repeat="entry in section.base.entries">
-          <div ng-click="vm.reload(section.path + '.' + entry.name)" class="sv-icon" ng-class="vm.hasSettingChanged(section.path + '.' + entry.name) ? 'sv-icon-reload' : null" title="{{vm.hasSettingChanged(section.path + '.' + entry.name) ? 'Reload setting from last saved state' : ''}}"></div>
-          <div class="sv-control"><sv-directive-proxy entry="entry" value="vm.newSettings[section.path + '.' + entry.name]"></sv-directive-proxy></div>
-          <div ng-click="vm.toggleDefault(section.path + '.' + entry.name)" class="sv-icon" ng-class="vm.isDefaultSetting(section.path + '.' + entry.name) ? 'sv-icon-set' : 'sv-icon-unset'" title="{{vm.isDefaultSetting(section.path + '.' + entry.name) ? 'Set setting to default value (copy)' : 'Unset setting and redirect to default instead'}}"></div>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="sv-description">
-    <div ng-include="vm.descriptionUrl"></div>
-  </div>
-</div>

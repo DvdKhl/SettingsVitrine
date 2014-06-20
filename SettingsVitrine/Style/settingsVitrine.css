@@ -39,11 +39,15 @@
   overflow: auto;
 }
 
-
-
 /*overview*/
 .settings-vitrine .sv-indent {
   margin-left: 16px;
+}
+.settings-vitrine .sv-treeitem {
+  cursor: pointer;
+}
+.settings-vitrine .sv-treeitem.sv-selected {
+  font-weight: bold;
 }
 
 .settings-vitrine .sv-statebuttons {

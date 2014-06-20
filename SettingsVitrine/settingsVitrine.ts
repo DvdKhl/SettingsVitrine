@@ -117,6 +117,8 @@ module SettingsVitrine {
 
 
         public Set(key: string, value: Object): boolean {
+            if(value === undefined) return false;
+
             if(value === SettingsVitrine.Unset) {
                 delete this.settings[key];
             } else if(key in this.schemaEntries) {
@@ -126,6 +128,10 @@ module SettingsVitrine {
             }
             return true;
         }
+        public SetMultiple(settings: { [key: string]: any }) {
+            for(var setting in settings) this.Set(setting, settings[setting]);
+        }
+
         public Get(key: string): Object {
             var value = undefined;
             if(key in this.settings) {
@@ -169,10 +175,6 @@ module SettingsVitrine {
         public CreateProxy(keyPrefix: string): SettingsProxy { return new SettingsProxy(this, keyPrefix); }
 
         public CreateDeriving(name: string): SettingsStorage { return new SettingsStorage(name, this.schema, this); }
-        public MergeIntoParent(): void {
-            if(this.parent == null) throw new Error("SettingsStorage.MergeIntoParent: Parent is null");
-            angular.extend(this.parent.settings, this.settings);
-        }
 
         public SaveToLocalStorage() { this.SaveTo(SettingsStorage.LocalStorageProvider); }
         public SaveTo(provider: SettingsStorageProvider) {
@@ -205,18 +207,23 @@ module SettingsVitrine {
                     curStorage = curStorage.parent;
 
                     fullName = data.parentName ? schema.name + "." + data.parentName : null;
-                }
+                } else fullName = null;
             }
 
             return storage;
         }
+
+        public get Keys(): string[] { return (<any>this.settings).keys(); }
+        public get Settings(): { [key: string]: any } { return this.settings; }
+        public set Settings(settings: { [key: string]: any }) { this.settings = settings; }
     }
 
     export class DisplayController {
         private $scope: any;
+        private storage: SettingsStorage;
 
         private vm = {
-            storage: <SettingsStorage>null,
+            settings: <{ [key: string]: any }>{},
 
             sections: [],
             selectedSection: null,
@@ -229,6 +236,7 @@ module SettingsVitrine {
             reload: (key: string) => this.reload(key),
             toggleDefault: (key: string) => this.toggleDefault(key),
             resetDescription: () => this.resetDescription(),
+            getDefault: (key) => this.storage.GetSchemaDefault(key),
             reloadAll: () => this.reloadAll(),
             unsetAll: () => this.unsetAll(),
             save: () => this.save(),
@@ -241,7 +249,9 @@ module SettingsVitrine {
             this.$scope = $scope;
             $scope.vm = this.vm;
 
-            this.vm.storage = storage.CreateDeriving("TEMP");
+            this.storage = storage;
+            this.vm.settings = angular.extend({}, storage.Settings);
+
             this.vm.sections = this.flattenTree(storage.Schema);
             this.setSelection(this.vm.sections[0]);
 
@@ -249,31 +259,30 @@ module SettingsVitrine {
         }
 
         private resetDescription() { this.vm.descriptionUrl = "templates/sv/intro.html"; }
-        private reloadAll() { this.vm.storage.ClearAll(); }
-        private unsetAll() { this.vm.storage.Parent.ClearAll(); }
+        private reloadAll() { this.vm.settings = angular.extend({}, this.storage.Settings); }
+        private unsetAll() { this.vm.settings = {}; }
         private save() {
-            this.vm.storage.MergeIntoParent();
-            this.vm.storage.ClearAll();
-            this.vm.storage.Parent.SaveToLocalStorage();
+            this.storage.Settings = this.vm.settings;
+            this.storage.SaveToLocalStorage();
         }
         private reload(key) {
-            var value = this.vm.storage.GetImmediate(key);
-            if(value == undefined) value = SettingsVitrine.Unset;
-            this.vm.storage.Set(key, value);
+            var value = this.storage.GetImmediate(key);
+            if(value === undefined) delete this.vm.settings[key];
+            else this.vm.settings[key] = value;
         }
 
         private toggleDefault(key) {
-            if(this.vm.storage.GetImmediate(key) === undefined) {
-                this.vm.storage.Set(key, this.vm.storage.Parent.Get(key));
+            if(this.vm.settings[key] === undefined) {
+                this.vm.settings[key] = this.storage.GetSchemaDefault(key); //TODO
             } else {
-                this.vm.storage.Set(key, SettingsVitrine.Unset);
+                delete this.vm.settings[key];
             }
         }
 
-        private isDefaultSetting(key): boolean { return this.vm.storage.GetImmediate(key) === undefined; }
+        private isDefaultSetting(key): boolean { return this.vm.settings[key] === undefined; }
         private hasSettingChanged(key): boolean {
-            var newValue = this.vm.storage.GetImmediate(key);
-            var currentValue = this.vm.storage.Parent.GetImmediate(key);
+            var newValue = this.vm.settings[key];
+            var currentValue = this.storage.GetImmediate(key);
             return !angular.equals(newValue, currentValue);
         }
 
@@ -455,12 +464,10 @@ module SettingsVitrine {
         SVModule.directive("svDirectiveProxy", function($compile) {
             return {
                 restrict: 'E',
-                scope: { entry: "=", storage: "=", key: "=" },
+                scope: { entry: "=", value: "=", defValue: "=" },
                 replace: true,
                 link: function(scope, element, attrs, ctrl) {
-                    scope.value = scope.storage.Get(scope.key);
-
-                    var templateStr = "<" + scope.entry.bindingDirective + ' parameters="entry.bindingParameters" value="value"></' + scope.entry.bindingDirective + ">";
+                    var templateStr = "<" + scope.entry.bindingDirective + ' parameters="entry.bindingParameters" value="value" def-value="defValue"></' + scope.entry.bindingDirective + ">";
                     var compiledElem = $compile(templateStr)(scope);
                     element.replaceWith(compiledElem);
                 }
