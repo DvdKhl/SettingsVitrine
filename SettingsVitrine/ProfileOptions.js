@@ -4,15 +4,6 @@
         name: "Settings",
         sections: [
             {
-                name: "theme",
-                entries: [
-                    {
-                        name: "pageCssUrl",
-                        defaultValue: "http://static.anidb.net/css/anidbstyle2/anidbstyle2.css",
-                        bindingDirective: "sv-textboxlabel-binding"
-                    }
-                ]
-            }, {
                 name: "global",
                 sections: [
                     {

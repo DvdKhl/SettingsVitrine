@@ -115,7 +115,6 @@ module SettingsVitrine {
             this.parent = parent;
         }
 
-
         public Set(key: string, value: Object): boolean {
             if(value === undefined) return false;
 
@@ -140,26 +139,34 @@ module SettingsVitrine {
                 value = this.parent.Get(key);
             } else if(key in this.schemaEntries) {
                 var entry = <SchemaEntry>this.schemaEntries[key].base;
-                if("defaultValue" in entry) value = entry.defaultValue;
+                value = entry.defaultValue || null;
             } else {
                 console.log("SettingsStorage.Get: Key " + key + " not in schema");
             }
 
             return value;
         }
+        public GetWithoutSelf(key: string): Object {
+            var value = undefined;
+            if(this.parent) {
+                value = this.parent.Get(key);
+            } else if(key in this.schemaEntries) {
+                var entry = <SchemaEntry>this.schemaEntries[key].base;
+                value = entry.defaultValue || null;
+            }
+            return value;
+        }
         public GetSchemaDefault(key: string): Object {
+            var value = undefined;
             if(key in this.schemaEntries) {
                 var entry = <SchemaEntry>this.schemaEntries[key].base;
-                if("defaultValue" in entry) return entry.defaultValue;
+                value = entry.defaultValue || null;
             } else {
                 console.log("SettingsStorage.GetSchemaDefault: Key " + key + " not in schema");
             }
             return undefined;
         }
-        public GetImmediate(key: string): Object {
-            if(key in this.settings) return this.settings[key];
-            return undefined;
-        }
+        public GetImmediate(key: string): Object { return this.settings[key]; }
         public GetNoSchemaDefault(key: string) {
             var value = undefined;
             if(key in this.settings) {
@@ -167,7 +174,6 @@ module SettingsVitrine {
             } else if(this.parent) {
                 value = this.parent.GetNoSchemaDefault(key);
             }
-
             return value;
         }
 
@@ -273,7 +279,7 @@ module SettingsVitrine {
 
         private toggleDefault(key) {
             if(this.vm.settings[key] === undefined) {
-                this.vm.settings[key] = this.storage.GetSchemaDefault(key); //TODO
+                this.vm.settings[key] = this.storage.GetWithoutSelf(key); //TODO
             } else {
                 delete this.vm.settings[key];
             }
@@ -449,8 +455,6 @@ module SettingsVitrine {
             };
         });
 
-
-
         SVModule.directive('svDisplay', () => {
             return {
                 restrict: 'E',
@@ -461,7 +465,7 @@ module SettingsVitrine {
             };
         });
 
-        SVModule.directive("svDirectiveProxy", function($compile) {
+        SVModule.directive("svDirectiveProxy", ($compile) => {
             return {
                 restrict: 'E',
                 scope: { entry: "=", value: "=", defValue: "=" },

@@ -135,28 +135,35 @@ var SettingsVitrine;
                 value = this.parent.Get(key);
             } else if (key in this.schemaEntries) {
                 var entry = this.schemaEntries[key].base;
-                if ("defaultValue" in entry)
-                    value = entry.defaultValue;
+                value = entry.defaultValue || null;
             } else {
                 console.log("SettingsStorage.Get: Key " + key + " not in schema");
             }
 
             return value;
         };
+        SettingsStorage.prototype.GetWithoutSelf = function (key) {
+            var value = undefined;
+            if (this.parent) {
+                value = this.parent.Get(key);
+            } else if (key in this.schemaEntries) {
+                var entry = this.schemaEntries[key].base;
+                value = entry.defaultValue || null;
+            }
+            return value;
+        };
         SettingsStorage.prototype.GetSchemaDefault = function (key) {
+            var value = undefined;
             if (key in this.schemaEntries) {
                 var entry = this.schemaEntries[key].base;
-                if ("defaultValue" in entry)
-                    return entry.defaultValue;
+                value = entry.defaultValue || null;
             } else {
                 console.log("SettingsStorage.GetSchemaDefault: Key " + key + " not in schema");
             }
             return undefined;
         };
         SettingsStorage.prototype.GetImmediate = function (key) {
-            if (key in this.settings)
-                return this.settings[key];
-            return undefined;
+            return this.settings[key];
         };
         SettingsStorage.prototype.GetNoSchemaDefault = function (key) {
             var value = undefined;
@@ -165,7 +172,6 @@ var SettingsVitrine;
             } else if (this.parent) {
                 value = this.parent.GetNoSchemaDefault(key);
             }
-
             return value;
         };
 
@@ -321,7 +327,7 @@ var SettingsVitrine;
 
         DisplayController.prototype.toggleDefault = function (key) {
             if (this.vm.settings[key] === undefined) {
-                this.vm.settings[key] = this.storage.GetSchemaDefault(key); //TODO
+                this.vm.settings[key] = this.storage.GetWithoutSelf(key); //TODO
             } else {
                 delete this.vm.settings[key];
             }
