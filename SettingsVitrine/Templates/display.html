@@ -1,52 +1,92 @@
-﻿<script type="text/ng-template" id="templates/sv/intro.html">
-  <h1>Hints</h1>
-  <ul>
-    <li>
-      <ul>
-        <li><h2>Overview</h2></li>
-        <li><b>Search:</b> Type in keywords to only show settings associated with that keyword.</li>
-        <li><b>Tree:</b> Click on an tree entry and only settings of that section will be shown (including sub-sections). A description will shown on the right panel (i.e. here)</li>
-        <li>You can combine both filter options. Only settings which satisfy both conditions will be shown.</li>
-      </ul>
-    </li>
-    <li>
-      <ul>
-        <li><h2>Settings</h2></li>
-        <li>In general, all settings have a default setting, if you haven't set a setting the default will be used. Please note that the default setting will <b>not</b> be copied in that case. If for example the admins decide to change a default value of a setting you will use that new default value! If you want to avoid that please <b>set</b> the setting to the value you want.</li>
-        <li><div class="sv-icon sv-icon-reload" title="Reload setting from last saved state"></div>: Means you have changed the settings after you last saved the settings. Clicking it will restore the setting to the saved value.</li>
-        <li><div class="sv-icon sv-icon-set" title="Set setting to default value (copy)"></div>: Means you have the setting unset. Clicking it will set it to the default value.</li>
-        <li><div class="sv-icon sv-icon-unset" title="Unset setting and redirect to default instead"></div>: Means you have the setting set. Clicking it will unset the setting.</li>
-        <li>You can safely change the current section (tree items) without losing the changed, but also remember this when saving the settings!</li>
-      </ul>
-    </li>
-    <li>
-      <ul>
-        <li><h2>Help</h2></li>
-        <li>Help and descriptions for settings will be displayed here after you click on the entry. (For setting descriptions click on the whitespace)</li>
-      </ul>
-    </li>
-  </ul>
-</script>
-<script type="text/ng-template" id="templates/sv/itempicker.html">
-  <div>
-    <div>{{parameters.labelText}}</div>
-    <div class="sv-itempicker">
-      <div class="sv-ip-select">
-        <div>Available:</div>
-        <select size="8" class="sv-ip-available" ng-model="vm.selectedAvailable" ng-options="item as vm.getName(item) for item in vm.availableItems | orderBy: vm.getName"></select>
-      </div>
-      <div class="sv-ip-buttons">
-        <input class="sv-ip-add" type="button" ng-click="vm.add()" value=">>" />
-        <input class="sv-ip-remove" type="button" ng-click="vm.remove()" value="<<" />
-      </div>
-      <div class="sv-ip-select">
-        <div>Chosen:</div>
-        <select size="8" class="sv-ip-chosen" ng-model="vm.selectedChosen" ng-options="item as vm.getName(item) for item in vm.chosenItems"></select>
-      </div>
-      <div class="sv-ip-buttons">
-        <input class="sv-ip-moveup" type="button" ng-click="vm.moveUp()" value="up" />
-        <input class="sv-ip-movedown" type="button" ng-click="vm.moveDown()" value="down" />
+﻿<div class="settings-vitrine">
+  <script type="text/ng-template" id="templates/sv/intro.html">
+    <h1>Hints</h1>
+    <ul>
+      <li>
+        <ul>
+          <li><h2>Overview</h2></li>
+          <li><b>Search:</b> Type in keywords to only show settings associated with that keyword.</li>
+          <li><b>Tree:</b> Click on an tree entry and only settings of that section will be shown (including sub-sections). A description will shown on the right panel (i.e. here)</li>
+          <li>You can combine both filter options. Only settings which satisfy both conditions will be shown.</li>
+        </ul>
+      </li>
+      <li>
+        <ul>
+          <li><h2>Settings</h2></li>
+          <li>In general, all settings have a default setting, if you haven't set a setting the default will be used. Please note that the default setting will <b>not</b> be copied in that case. If for example the admins decide to change a default value of a setting you will use that new default value! If you want to avoid that please <b>set</b> the setting to the value you want.</li>
+          <li><div class="sv-icon sv-icon-reload" title="Reload setting from last saved state"></div>: Means you have changed the settings after you last saved the settings. Clicking it will restore the setting to the saved value.</li>
+          <li><div class="sv-icon sv-icon-set" title="Set setting to default value (copy)"></div>: Means you have the setting unset. Clicking it will set it to the default value.</li>
+          <li><div class="sv-icon sv-icon-unset" title="Unset setting and redirect to default instead"></div>: Means you have the setting set. Clicking it will unset the setting.</li>
+          <li>You can safely change the current section (tree items) without losing the changed, but also remember this when saving the settings!</li>
+        </ul>
+      </li>
+      <li>
+        <ul>
+          <li><h2>Help</h2></li>
+          <li>Help and descriptions for settings will be displayed here after you click on the entry. (For setting descriptions click on the whitespace)</li>
+        </ul>
+      </li>
+    </ul>
+  </script>
+  <script type="text/ng-template" id="templates/sv/itempicker.html">
+    <div>
+      <div>{{parameters.labelText}}</div>
+      <div class="sv-itempicker">
+        <div class="sv-ip-select">
+          <div>Available:</div>
+          <select size="8" class="sv-ip-available" ng-model="vm.selectedAvailable" ng-options="item as vm.getName(item) for item in vm.availableItems | orderBy: vm.getName"></select>
+        </div>
+        <div class="sv-ip-buttons">
+          <input class="sv-ip-add" type="button" ng-click="vm.add()" value=">>" />
+          <input class="sv-ip-remove" type="button" ng-click="vm.remove()" value="<<" />
+        </div>
+        <div class="sv-ip-select">
+          <div>Chosen:</div>
+          <select size="8" class="sv-ip-chosen" ng-model="vm.selectedChosen" ng-options="item as vm.getName(item) for item in vm.chosenItems"></select>
+        </div>
+        <div class="sv-ip-buttons">
+          <input class="sv-ip-moveup" type="button" ng-click="vm.moveUp()" value="up" />
+          <input class="sv-ip-movedown" type="button" ng-click="vm.moveDown()" value="down" />
+        </div>
       </div>
     </div>
+  </script>
+
+
+
+
+  <div class="sv-overview">
+    <input class="sv-search" placeholder="Search" type="text" />
+    <div class="sv-tree">
+      <div class="sv-treerow" ng-repeat="section in vm.sections">
+        <span ng-repeat="n in [] | range: section.depth" class="sv-indent"></span>
+        <span class="sv-treeitem" ng-class="section.isSelected ? 'sv-selected' : null" ng-click="vm.setSelection(section)">
+          <span class="sv-icon" ng-class="!section.base.entries ? 'sv-icon-branch' : 'sv-icon-leaf'"></span>
+          <span>{{section.base.name}}</span>
+        </span>
+      </div>
+    </div>
+    <div class="sv-statebuttons">
+      <input type="button" ng-click="vm.reloadAll()" class="sv-reload" value="Reload" />
+      <input type="button" ng-click="vm.unsetAll()" class="sv-unsetall" value="Unset all" />
+      <input type="button" ng-click="vm.save()" class="sv-save" value="Save" />
+    </div>
   </div>
-</script>
+
+  <div class="sv-middlepanel" ng-click="vm.resetDescription()">
+    <div class="sv-settings">
+      <ul class="sv-section" ng-repeat="section in vm.selectedSection">
+        <li><h3>{{vm.replaceAll(section.path, '\\.', ' ▶ ')}}</h3></li>
+        <li class="sv-entry" ng-class-odd="'g_odd'" ng-repeat="entry in section.base.entries">
+          <div ng-click="vm.reload(section.path + '.' + entry.name)" class="sv-icon" ng-class="vm.hasSettingChanged(section.path + '.' + entry.name) ? 'sv-icon-reload' : null" title="{{vm.hasSettingChanged(section.path + '.' + entry.name) ? 'Reload setting from last saved state' : ''}}"></div>
+          <div class="sv-control"><sv-directive-proxy entry="entry" value="vm.settings[section.path + '.' + entry.name]" def-value="vm.getDefault(section.path + '.' + entry.name)"></sv-directive-proxy></div>
+          <div ng-click="vm.toggleDefault(section.path + '.' + entry.name)" class="sv-icon" ng-class="vm.isDefaultSetting(section.path + '.' + entry.name) ? 'sv-icon-set' : 'sv-icon-unset'" title="{{vm.isDefaultSetting(section.path + '.' + entry.name) ? 'Set setting to default value (copy)' : 'Unset setting and redirect to default instead'}}"></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sv-description">
+    <div ng-include="vm.descriptionUrl"></div>
+  </div>
+</div>
