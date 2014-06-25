@@ -269,7 +269,7 @@ module SettingsVitrine {
         private reloadAll() { this.vm.settings = angular.extend({}, this.storage.Settings); }
         private unsetAll() { this.vm.settings = {}; }
         private save() {
-            this.storage.Settings = this.vm.settings;
+            this.storage.Settings = angular.extend({}, this.vm.settings);
             this.storage.SaveToLocalStorage();
         }
         private reload(key) {

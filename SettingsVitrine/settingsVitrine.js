@@ -315,7 +315,7 @@ var SettingsVitrine;
             this.vm.settings = {};
         };
         DisplayController.prototype.save = function () {
-            this.storage.Settings = this.vm.settings;
+            this.storage.Settings = angular.extend({}, this.vm.settings);
             this.storage.SaveToLocalStorage();
         };
         DisplayController.prototype.reload = function (key) {
