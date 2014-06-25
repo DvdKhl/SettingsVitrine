@@ -42,6 +42,7 @@ var SettingsVitrine;
     })();
 
     SettingsVitrine.Unset = {};
+    SettingsVitrine.DisplayTemplateUrl = 'SettingsVitrine/Templates/display.html';
 
     var SettingsProxy = (function () {
         function SettingsProxy(service, pathPrefix) {
@@ -160,7 +161,7 @@ var SettingsVitrine;
             } else {
                 console.log("SettingsStorage.GetSchemaDefault: Key " + key + " not in schema");
             }
-            return undefined;
+            return value;
         };
         SettingsStorage.prototype.GetImmediate = function (key) {
             return this.settings[key];
@@ -535,7 +536,7 @@ var SettingsVitrine;
         SettingsVitrine.SVModule.directive('svDisplay', function () {
             return {
                 restrict: 'E',
-                templateUrl: 'templates/sv/display.html',
+                templateUrl: SettingsVitrine.DisplayTemplateUrl,
                 scope: { storage: "=" },
                 replace: true,
                 controller: function ($scope) {

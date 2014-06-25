@@ -40,6 +40,7 @@ module SettingsVitrine {
     }
 
     export var Unset = {};
+    export var DisplayTemplateUrl = 'SettingsVitrine/Templates/display.html';
 
     export interface SchemaSection {
         name: string;
@@ -164,7 +165,7 @@ module SettingsVitrine {
             } else {
                 console.log("SettingsStorage.GetSchemaDefault: Key " + key + " not in schema");
             }
-            return undefined;
+            return value;
         }
         public GetImmediate(key: string): Object { return this.settings[key]; }
         public GetNoSchemaDefault(key: string) {
@@ -458,7 +459,7 @@ module SettingsVitrine {
         SVModule.directive('svDisplay', () => {
             return {
                 restrict: 'E',
-                templateUrl: 'templates/sv/display.html',
+                templateUrl: SettingsVitrine.DisplayTemplateUrl,
                 scope: { storage: "=" },
                 replace: true,
                 controller: ($scope) => new SettingsVitrine.DisplayController($scope, $scope.storage)
