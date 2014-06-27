@@ -566,21 +566,11 @@ var SettingsVitrine;
                 replace: true
             };
         });
-        SettingsVitrine.SVModule.directive('svAnidbcsspickerBinding', function () {
-            return {
-                restrict: 'E',
-                template: '<div>svAnidbcsspickerBinding</div>',
-                //templateUrl: 'templates/display.html',
-                scope: {},
-                replace: true
-            };
-        });
 
         SettingsVitrine.SVModule.directive('svCheckboxlabelBinding', function () {
             return {
                 restrict: 'E',
                 template: '<label><input ng-model="value" type="checkbox" /><span class="text"> {{parameters.labelText}}</span></label>',
-                //templateUrl: 'templates/display.html',
                 scope: { parameters: "=", value: "=" },
                 replace: true
             };
@@ -631,7 +621,6 @@ var SettingsVitrine;
             return {
                 restrict: 'E',
                 template: '<div>svTimezonepickerBinding</div>',
-                //templateUrl: 'templates/display.html',
                 scope: {},
                 replace: true
             };
@@ -641,7 +630,6 @@ var SettingsVitrine;
             return {
                 restrict: 'E',
                 template: '<div>svBlocktabsectionpickerBinding</div>',
-                //templateUrl: 'templates/display.html',
                 scope: {},
                 replace: true
             };
@@ -655,24 +643,6 @@ var SettingsVitrine;
                 controller: function ($scope) {
                     return new SettingsVitrine.ItemPickerBinding($scope);
                 }
-            };
-        });
-        SettingsVitrine.SVModule.directive('svAnidbfeedBinding', function () {
-            return {
-                restrict: 'E',
-                template: '<div>svAnidbfeedBinding</div>',
-                //templateUrl: 'templates/display.html',
-                scope: {},
-                replace: true
-            };
-        });
-        SettingsVitrine.SVModule.directive('svAnidbjabberBinding', function () {
-            return {
-                restrict: 'E',
-                template: '<div>svAnidbjabberBinding</div>',
-                //templateUrl: 'templates/display.html',
-                scope: {},
-                replace: true
             };
         });
     }

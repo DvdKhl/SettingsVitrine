@@ -485,17 +485,6 @@ module SettingsVitrine {
                 template: '<div><span ng-if="parameters.labelFirst" class="text">{{parameters.labelText}}</span><input ng-model="value" type="text" ng-class="parameters.cssClasses" /><span ng-if="!parameters.labelFirst" class="text"> {{parameters.labelText}}</span></div>',
                 scope: { parameters: "=", value: "=" },
                 replace: true,
-                //controller: ($scope, svService) => new SettingsVitrine.DisplayController($scope, svService)
-            };
-        });
-        SVModule.directive('svAnidbcsspickerBinding', () => {
-            return {
-                restrict: 'E',
-                template: '<div>svAnidbcsspickerBinding</div>',
-                //templateUrl: 'templates/display.html',
-                scope: {},
-                replace: true,
-                //controller: ($scope, svService) => new SettingsVitrine.DisplayController($scope, svService)
             };
         });
 
@@ -503,10 +492,8 @@ module SettingsVitrine {
             return {
                 restrict: 'E',
                 template: '<label><input ng-model="value" type="checkbox" /><span class="text"> {{parameters.labelText}}</span></label>',
-                //templateUrl: 'templates/display.html',
                 scope: { parameters: "=", value: "=" },
                 replace: true,
-                //controller: ($scope, svService) => new SettingsVitrine.DisplayController($scope, svService)
             };
         });
         SVModule.directive('svDropdownlabelBinding', () => {
@@ -537,18 +524,15 @@ module SettingsVitrine {
                             if(scope.parameters.getValue(items[i]) == val) scope.selectedItem = items[i];
                         }
                     })
-            }
-                //controller: ($scope, svService) => new SettingsVitrine.DisplayController($scope, svService)
+                }
             };
         });
         SVModule.directive('svTimezonepickerBinding', () => {
             return {
                 restrict: 'E',
                 template: '<div>svTimezonepickerBinding</div>',
-                //templateUrl: 'templates/display.html',
                 scope: {},
                 replace: true,
-                //controller: ($scope, svService) => new SettingsVitrine.DisplayController($scope, svService)
             };
         });
 
@@ -556,10 +540,8 @@ module SettingsVitrine {
             return {
                 restrict: 'E',
                 template: '<div>svBlocktabsectionpickerBinding</div>',
-                //templateUrl: 'templates/display.html',
                 scope: {},
                 replace: true,
-                //controller: ($scope, svService) => new SettingsVitrine.DisplayController($scope, svService)
             };
         });
         SVModule.directive('svItempickerBinding', () => {
@@ -569,26 +551,6 @@ module SettingsVitrine {
                 scope: { parameters: "=", value: "=", defValue: "=" },
                 replace: true,
                 controller: ($scope) => new SettingsVitrine.ItemPickerBinding($scope)
-            };
-        });
-        SVModule.directive('svAnidbfeedBinding', () => {
-            return {
-                restrict: 'E',
-                template: '<div>svAnidbfeedBinding</div>',
-                //templateUrl: 'templates/display.html',
-                scope: {},
-                replace: true,
-                //controller: ($scope, svService) => new SettingsVitrine.DisplayController($scope, svService)
-            };
-        });
-        SVModule.directive('svAnidbjabberBinding', () => {
-            return {
-                restrict: 'E',
-                template: '<div>svAnidbjabberBinding</div>',
-                //templateUrl: 'templates/display.html',
-                scope: {},
-                replace: true,
-                //controller: ($scope, svService) => new SettingsVitrine.DisplayController($scope, svService)
             };
         });
     }
