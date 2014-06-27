@@ -328,7 +328,7 @@ var SettingsVitrine;
 
         DisplayController.prototype.toggleDefault = function (key) {
             if (this.vm.settings[key] === undefined) {
-                this.vm.settings[key] = this.storage.GetWithoutSelf(key); //TODO
+                this.vm.settings[key] = this.storage.GetWithoutSelf(key);
             } else {
                 delete this.vm.settings[key];
             }
@@ -440,7 +440,6 @@ var SettingsVitrine;
 
                 var foundIndex;
                 if ((foundIndex = values.indexOf(this.getValue(this.items[i]))) >= 0) {
-                    //this.vm.chosenItems.push(this.items[i]);
                     this.vm.chosenItems[foundIndex] = this.items[i];
                 } else {
                     this.vm.availableItems.push(this.items[i]);
@@ -579,7 +578,6 @@ var SettingsVitrine;
             return {
                 restrict: 'E',
                 template: '<div><select ng-model="selectedItem" ng-change="itemChanged()" ng-options="item as parameters.getName(item) for item in items | orderBy: parameters.getName"></select><span class="text"> {{parameters.labelText}}</span></div>',
-                //templateUrl: 'templates/display.html',
                 scope: { parameters: "=", value: "=", defValue: "=" },
                 replace: true,
                 link: function (scope, element, attrs, ctrl) {
