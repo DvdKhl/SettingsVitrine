@@ -55,16 +55,20 @@ module SettingsVitrine {
     }
 
     export class SettingsProxy {
-        private service: SettingsStorage;
+        private storage: SettingsStorage;
         private pathPrefix: string;
 
-        constructor(service: SettingsStorage, pathPrefix: string) {
-            this.service = service;
+        constructor(storage: SettingsStorage, pathPrefix: string) {
+            this.storage = storage;
             this.pathPrefix = pathPrefix + ".";
         }
 
-        public set(key: string, value: Object): boolean { return this.service.Set(this.pathPrefix + key, value); }
-        public get(key: string): Object { return this.service.Get(this.pathPrefix + key); }
+        public Set(key: string, value: any): boolean { return this.storage.Set(this.pathPrefix + key, value); }
+        public Get(key: string): any { return this.storage.Get(this.pathPrefix + key); }
+        public GetWithoutSelf(key: string): any { return this.storage.GetWithoutSelf(this.pathPrefix + key); }
+        public GetSchemaDefault(key: string): any { return this.storage.GetSchemaDefault(this.pathPrefix + key); }
+        public GetImmediate(key: string): any { return this.storage.GetImmediate(this.pathPrefix + key); }
+        public GetNoSchemaDefault(key: string): any { return this.storage.GetNoSchemaDefault(this.pathPrefix + key); }
     }
 
     export interface SettingsStorageProviderInfo {
@@ -116,7 +120,7 @@ module SettingsVitrine {
             this.parent = parent;
         }
 
-        public Set(key: string, value: Object): boolean {
+        public Set(key: string, value: any): boolean {
             if(value === undefined) return false;
 
             if(value === SettingsVitrine.Unset) {
@@ -132,7 +136,7 @@ module SettingsVitrine {
             for(var setting in settings) this.Set(setting, settings[setting]);
         }
 
-        public Get(key: string): Object {
+        public Get(key: string): any {
             var value = undefined;
             if(key in this.settings) {
                 value = this.settings[key];
@@ -147,7 +151,7 @@ module SettingsVitrine {
 
             return value;
         }
-        public GetWithoutSelf(key: string): Object {
+        public GetWithoutSelf(key: string): any {
             var value = undefined;
             if(this.parent) {
                 value = this.parent.Get(key);
@@ -157,7 +161,7 @@ module SettingsVitrine {
             }
             return value;
         }
-        public GetSchemaDefault(key: string): Object {
+        public GetSchemaDefault(key: string): any {
             var value = undefined;
             if(key in this.schemaEntries) {
                 var entry = <SchemaEntry>this.schemaEntries[key].base;
@@ -167,8 +171,8 @@ module SettingsVitrine {
             }
             return value;
         }
-        public GetImmediate(key: string): Object { return this.settings[key]; }
-        public GetNoSchemaDefault(key: string) {
+        public GetImmediate(key: string): any { return this.settings[key]; }
+        public GetNoSchemaDefault(key: string): any {
             var value = undefined;
             if(key in this.settings) {
                 value = this.settings[key];
@@ -443,7 +447,7 @@ module SettingsVitrine {
     }
 
     export var SVModule: ng.IModule
-    export function register(angular: ng.IAngularStatic) {
+    export function Register(angular: ng.IAngularStatic) {
         if(!angular) return;
 
         SVModule = angular.module("settingsVitrine", []);
@@ -522,7 +526,7 @@ module SettingsVitrine {
                             if(scope.parameters.getValue(items[i]) == val) scope.selectedItem = items[i];
                         }
                     })
-                }
+            }
             };
         });
         SVModule.directive('svTimezonepickerBinding', () => {
@@ -554,4 +558,4 @@ module SettingsVitrine {
     }
 }
 
-SettingsVitrine.register(angular);
+SettingsVitrine.Register(angular);

@@ -45,15 +45,27 @@ var SettingsVitrine;
     SettingsVitrine.DisplayTemplateUrl = 'SettingsVitrine/Templates/display.html';
 
     var SettingsProxy = (function () {
-        function SettingsProxy(service, pathPrefix) {
-            this.service = service;
+        function SettingsProxy(storage, pathPrefix) {
+            this.storage = storage;
             this.pathPrefix = pathPrefix + ".";
         }
-        SettingsProxy.prototype.set = function (key, value) {
-            return this.service.Set(this.pathPrefix + key, value);
+        SettingsProxy.prototype.Set = function (key, value) {
+            return this.storage.Set(this.pathPrefix + key, value);
         };
-        SettingsProxy.prototype.get = function (key) {
-            return this.service.Get(this.pathPrefix + key);
+        SettingsProxy.prototype.Get = function (key) {
+            return this.storage.Get(this.pathPrefix + key);
+        };
+        SettingsProxy.prototype.GetWithoutSelf = function (key) {
+            return this.storage.GetWithoutSelf(this.pathPrefix + key);
+        };
+        SettingsProxy.prototype.GetSchemaDefault = function (key) {
+            return this.storage.GetSchemaDefault(this.pathPrefix + key);
+        };
+        SettingsProxy.prototype.GetImmediate = function (key) {
+            return this.storage.GetImmediate(this.pathPrefix + key);
+        };
+        SettingsProxy.prototype.GetNoSchemaDefault = function (key) {
+            return this.storage.GetNoSchemaDefault(this.pathPrefix + key);
         };
         return SettingsProxy;
     })();
@@ -518,7 +530,7 @@ var SettingsVitrine;
     SettingsVitrine.ItemPickerBinding = ItemPickerBinding;
 
     SettingsVitrine.SVModule;
-    function register(angular) {
+    function Register(angular) {
         if (!angular)
             return;
 
@@ -644,8 +656,8 @@ var SettingsVitrine;
             };
         });
     }
-    SettingsVitrine.register = register;
+    SettingsVitrine.Register = Register;
 })(SettingsVitrine || (SettingsVitrine = {}));
 
-SettingsVitrine.register(angular);
+SettingsVitrine.Register(angular);
 //# sourceMappingURL=settingsVitrine.js.map
